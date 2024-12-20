@@ -1,0 +1,4 @@
+azure-cli
+google-cloud-cli
+terraform
+unzip
