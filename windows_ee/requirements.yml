@@ -6,4 +6,4 @@ collections:
   - name: ansible.utils
   - name: ansible.posix
   - name: chocolatey.chocolatey
-  - name: microsoft.ad
+  # - name: microsoft.ad

@@ -1,0 +1,9 @@
+# AWS
+botocore
+boto3
+
+# OCI
+oci
+
+# Proxmox
+proxmoxer
