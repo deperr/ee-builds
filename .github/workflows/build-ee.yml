@@ -1,0 +1,96 @@
+name: Dynamically Build and Push EEs
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  # This job's purpose is to find which EE folders have changed
+  # and create a JSON list of them.
+  determine-matrix:
+    name: Determine Which EEs to Build
+    runs-on: ubuntu-latest
+    outputs:
+      # This output will be a JSON array like '["ee-minimal", "ee-network"]'
+      ees_to_build: ${{ steps.filter.outputs.changes }}
+    steps:
+      # This popular action finds changed files based on specified paths
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+      # The filter's name is now the same as the directory path.
+          filters: |
+            # Add a new block here for every new EE you create.
+            servicenow_ee:
+              - 'servicenow_ee/**'
+ 
+      # - name: Prepare Image Name and Tags
+      #   id: prep
+      #   run: |
+      #     echo "TAG_SHA=${GITHUB_SHA::8}" >> $GITHUB_ENV
+      #     echo "BUILD_DATE=$(date +%'Y%m%d%H%M')" >> $GITHUB_ENV
+
+  # This job will only run if the first job finds changes.
+  # It uses the JSON output from the first job to build its matrix.
+  build:
+    name: Build ${{ matrix.ee_dir }}
+    needs: determine-matrix
+    if: ${{ needs.determine-matrix.outputs.ees_to_build != '[]' }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ee_dir: ${{ fromJSON(needs.determine-matrix.outputs.ees_to_build) }}
+        
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install ansible-builder
+        run: pip install ansible-builder
+
+      - name: Log in to the Red Hat Registry
+        uses: redhat-actions/podman-login@v1
+        with:
+          registry: registry.redhat.io
+          username: ${{ secrets.REDHAT_USER }}
+          password: ${{ secrets.REDHAT_PASSWORD }}
+
+      - name: Log in to Quay.io
+        uses: redhat-actions/podman-login@v1
+        with:
+          registry: quay.io
+          username: ${{ secrets.QUAY_USERNAME }}
+          password: ${{ secrets.QUAY_PASSWORD }}
+
+      - name: Generate Date Tag
+        run: echo "DATE_TAG=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+      - name: Build EE with ansible-builder
+        run: |
+          echo "INFO: Building Execution Environment with tag: latest and ${{ env.DATE_TAG }}"
+          ansible-builder build \
+            --tag quay.io/${{ secrets.QUAY_USERNAME }}/${{ matrix.ee_dir }}:latest \
+            --tag quay.io/${{ secrets.QUAY_USERNAME }}/${{ matrix.ee_dir }}:${{ env.DATE_TAG}} \
+            --context . \
+            --container-runtime podman
+        working-directory: ./${{ matrix.ee_dir }}
+
+      - name: Push the EE image to the registry 🚀
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          image: ${{ secrets.QUAY_USERNAME }}/${{ matrix.ee_dir }}
+          tags: latest ${{ env.DATE_TAG }}
+          registry: quay.io

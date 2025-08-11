@@ -1,0 +1,12 @@
+---
+collections:
+  # ServiceNow
+  - name: servicenow.itsm
+  # Linux
+  - name: ansible.posix
+  - name: community.general
+  - name: containers.podman
+  - name: ansible.utils
+  # Windows
+  - name: ansible.windows
+  - name: community.windows
