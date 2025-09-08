@@ -30,7 +30,7 @@ jobs:
             # Add a new block here for every new EE you create.
             servicenow_ee:
               - 'servicenow_ee/**'
-              - 'teraform_ee/**'
+              - 'terraform_ee/**'
  
 
   # This job will only run if the first job finds changes.
