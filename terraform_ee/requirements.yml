@@ -1,0 +1,9 @@
+---
+
+collections:
+  - name: amazon.aws
+  - name: amazon.cloud
+  - name: infra.aap_configuration
+  - name: ansible.posix
+  - name: awx.awx
+  - name: cloud.terraform
