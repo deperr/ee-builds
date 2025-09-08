@@ -30,6 +30,7 @@ jobs:
             # Add a new block here for every new EE you create.
             servicenow_ee:
               - 'servicenow_ee/**'
+            terraform_ee:
               - 'terraform_ee/**'
  
 
