@@ -32,6 +32,8 @@ jobs:
               - 'servicenow_ee/**'
             terraform_ee:
               - 'terraform_ee/**'
+            vmware_ee:
+              - 'vmware_ee/**'
  
 
   # This job will only run if the first job finds changes.
