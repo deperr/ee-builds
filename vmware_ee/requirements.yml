@@ -7,4 +7,5 @@ collections:
   - name: community.vmware
   - name: vmware.vmware_rest
   - name: vmware.vmware
-  # - name: cloud.vmware_ops
+  - type: git
+    name: https://github.com/redhat-cop/cloud.vmware_ops.git

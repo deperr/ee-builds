@@ -2,3 +2,4 @@ pysnow
 requests
 netaddr
 pyvmomi
+aiohttp
