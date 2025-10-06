@@ -1,0 +1,13 @@
+---
+collections:
+  # General Collections
+  - name: community.general
+  - name: ansible.posix
+  # Microsoft Collections
+  - name: microsoft.sql
+  # - name: microsoft.ad
+  - name: community.windows
+  - name: ansible.windows
+  # Red Hat Collections
+  # - name: redhat.rhel_system_roles
+  #   version: ">=1.23.0"
