@@ -34,6 +34,8 @@ jobs:
               - 'terraform_ee/**'
             vmware_ee:
               - 'vmware_ee/**'
+            windows_ee:
+              - 'windows_ee/**'
  
 
   # This job will only run if the first job finds changes.

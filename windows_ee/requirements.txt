@@ -1,5 +1,4 @@
 requests
-netaddr
 requests-credssp
 pykerberos
 pywinrm
