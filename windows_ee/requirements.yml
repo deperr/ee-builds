@@ -3,7 +3,7 @@ collections:
   # General Collections
   - name: community.general
   - name: ansible.posix
-  # Microsoft Collections
+  # MSSQL Collections
   - name: microsoft.sql
   # - name: microsoft.ad
   - name: community.windows
