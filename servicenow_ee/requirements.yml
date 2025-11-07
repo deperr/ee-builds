@@ -1,12 +1,14 @@
 ---
 collections:
-  # ServiceNow
+  # AWS Collections
+  - name: amazon.aws
+  # ServiceNow Collections
   - name: servicenow.itsm
-  # Linux
+  # Linux Collections
   - name: ansible.posix
   - name: community.general
   - name: containers.podman
   - name: ansible.utils
-  # Windows
+  # Windows Collections
   - name: ansible.windows
   - name: community.windows
