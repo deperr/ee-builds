@@ -163,14 +163,14 @@ ansible-builder build --tag your-ee:latest --verbosity 3
 
 ---
 
-## 📋 Quick Reference
+## Quick Reference
 
 | EE | Primary Use | Key Tools | Collections |
-|---|---|---|---|
-| ServiceNow EE | ITSM Automation | ServiceNow, Windows, Containers | servicenow.itsm, ansible.windows |
-| Terraform EE | IaC Operations | Terraform, AWS CLI | amazon.aws, cloud.terraform |
-| VMware EE | Virtualization Management | vSphere APIs, Proxmox | vmware.vmware_rest, community.vmware |
-| Windows EE | Windows & SQL Server | WinRM, SQL Server, Kerberos | ansible.windows, microsoft.sql |
+|:---:|---|---|---|
+| ServiceNow | ITSM Automation | ServiceNow, Windows, Containers | servicenow.itsm, ansible.windows |
+| Terraform | IaC Operations | Terraform, AWS CLI | amazon.aws, cloud.terraform |
+| VMware | Virtualization Management | vSphere APIs, Proxmox | vmware.vmware_rest, community.vmware |
+| Windows | Windows & SQL Server | WinRM, SQL Server, Kerberos | ansible.windows, microsoft.sql |
 
 **Build Commands:**
 ```bash
