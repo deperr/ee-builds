@@ -2,52 +2,34 @@
 
 This repository contains custom Ansible Execution Environment (EE) definitions for Red Hat Ansible Automation Platform (AAP). These execution environments provide containerized, consistent runtime environments for Ansible playbooks with pre-installed collections, Python packages, and system dependencies.
 
-## 🏗️ Available Execution Environments
+## Available Execution Environments
 
 ### 1. ServiceNow EE (`servicenow_ee/`)
 A specialized execution environment for ServiceNow ITSM automation, Windows management, and container operations.
 
-**Key Features:**
-- ServiceNow ITSM integration capabilities
-- Windows and Linux system management
-- Container orchestration with Podman
-- NTLM/CredSSP authentication support
-
-**Primary Use Cases:**
-- ServiceNow incident, change, and problem management
-- Windows server automation and configuration
-- Cross-platform system administration
-- Container-based application deployment
-
 ### 2. Terraform EE (`terraform_ee/`)
 A comprehensive execution environment for Infrastructure as Code (IaC) operations combining Ansible with Terraform and cloud services.
 
-**Key Features:**
-- Terraform 1.10.3 for infrastructure provisioning
-- AWS CLI v2 for cloud operations
-- AAP configuration management
-- Multi-cloud infrastructure automation
+### 3. VMware EE (`vmware_ee/`)
+A dedicated execution environment for VMware vSphere infrastructure management and virtualization operations.
 
-**Primary Use Cases:**
-- Infrastructure provisioning with Terraform
-- AWS resource management and automation
-- AAP/AWX configuration and deployment
-- Hybrid cloud infrastructure operations
+### 4. Windows EE (`windows_ee/`)
+A specialized execution environment for Microsoft Windows ecosystem automation and database management.
 
-## 📋 Prerequisites
+##  Prerequisites
 
 - Red Hat Ansible Automation Platform 2.5+
 - Container runtime (Podman/Docker)
 - Access to Red Hat Container Registry
 - Valid Red Hat subscription for certified content
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Building Execution Environments
 
 1. **Clone the repository:**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/deperr/ee-builds.git
    cd ee-builds
    ```
 
@@ -63,6 +45,18 @@ A comprehensive execution environment for Infrastructure as Code (IaC) operation
    ansible-builder build --tag terraform-ee:latest
    ```
 
+4. **Build VMware EE:**
+   ```bash
+   cd vmware_ee
+   ansible-builder build --tag vmware-ee:latest
+   ```
+
+5. **Build Windows EE:**
+   ```bash
+   cd windows_ee
+   ansible-builder build --tag windows-ee:latest
+   ```
+
 ### Using with Ansible Automation Platform
 
 1. **Upload to AAP:**
@@ -74,51 +68,7 @@ A comprehensive execution environment for Infrastructure as Code (IaC) operation
    - Select the appropriate EE for your playbooks
    - Ensure proper credentials are configured
 
-## 📦 Component Details
-
-### ServiceNow EE Components
-
-#### Ansible Collections
-- `servicenow.itsm` - ServiceNow IT Service Management
-- `ansible.posix` - POSIX system operations
-- `community.general` - General-purpose modules
-- `containers.podman` - Container management
-- `ansible.utils` - Utility functions
-- `ansible.windows` - Windows automation
-- `community.windows` - Extended Windows support
-
-#### Python Dependencies
-- `requests-credssp` - NTLM/CredSSP authentication
-
-#### System Packages
-- `findutils`, `gcc`, `make` - Build essentials
-
-### Terraform EE Components
-
-#### Ansible Collections
-- `amazon.aws` - AWS service modules
-- `amazon.cloud` - Extended AWS functionality
-- `infra.aap_configuration` - AAP configuration management
-- `ansible.posix` - POSIX operations
-- `awx.awx` - AWX/AAP API integration
-- `cloud.terraform` - Terraform state management
-
-#### Python Dependencies
-- `pysnow` - ServiceNow API client
-- `requests` - HTTP library
-- `netaddr` - Network address manipulation
-- `botocore`, `boto3` - AWS SDK
-
-#### Additional Tools
-- **Terraform 1.10.3** - Infrastructure as Code
-- **AWS CLI v2** - AWS command-line interface
-
-#### System Packages
-- `unzip` - Archive extraction
-- `dnf` - Package management
-- Development tools for compilation
-
-## 🔧 Configuration
+## Configuration
 
 ### Galaxy Configuration
 Both execution environments are configured to use multiple Ansible Galaxy servers:
@@ -130,6 +80,31 @@ Both execution environments are configured to use multiple Ansible Galaxy server
 ### Authentication
 Configure authentication for private automation hubs by setting environment variables or updating the `ansible.cfg` files with appropriate tokens.
 
+## Customization
+
+### Adding Collections
+Edit `requirements.yml` in the respective EE directory:
+
+```yaml
+collections:
+  - name: your.collection
+    version: ">=1.0.0"
+```
+
+### Adding Python Packages
+Edit `requirements.txt`:
+
+```txt
+your-package==1.2.3
+```
+
+### Adding System Packages
+Edit `bindep.txt`:
+
+```txt
+your-system-package [platform:rhel-8]
+```
+
 ### Modifying Build Process
 Update `execution-environment.yml` to customize:
 - Base image
@@ -137,7 +112,7 @@ Update `execution-environment.yml` to customize:
 - Package manager options
 - Additional build files
 
-## 🔍 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -163,13 +138,28 @@ Enable verbose output during build:
 ansible-builder build --tag your-ee:latest --verbosity 3
 ```
 
-## 🆘 Support
+## Best Practices
 
-For issues related to:
-- **Execution Environment builds**: Create an issue in this repository
-- **Ansible collections**: Refer to collection documentation
-- **Red Hat AAP**: Contact Red Hat Support
-- **ServiceNow integration**: Consult ServiceNow documentation
+### Security
+
+- Use Red Hat certified collections when available
+- Regularly update base images and dependencies
+- Implement least privilege access patterns
+- Store sensitive data in AAP credentials, not in EE builds
+
+### Maintenance
+
+- Pin collection and package versions for reproducibility
+- Test EE builds in development before production deployment
+- Document custom modifications and their purposes
+- Maintain separate EEs for different automation domains
+
+### Performance
+
+- Optimize layer caching by ordering dependencies appropriately
+- Remove unnecessary packages and files
+- Use multi-stage builds for complex installations
+- Monitor EE size and startup times
 
 ---
 
@@ -179,6 +169,8 @@ For issues related to:
 |---|---|---|---|
 | ServiceNow EE | ITSM Automation | ServiceNow, Windows, Containers | servicenow.itsm, ansible.windows |
 | Terraform EE | IaC Operations | Terraform, AWS CLI | amazon.aws, cloud.terraform |
+| VMware EE | Virtualization Management | vSphere APIs, Proxmox | vmware.vmware_rest, community.vmware |
+| Windows EE | Windows & SQL Server | WinRM, SQL Server, Kerberos | ansible.windows, microsoft.sql |
 
 **Build Commands:**
 ```bash
@@ -187,4 +179,10 @@ cd servicenow_ee && ansible-builder build --tag servicenow-ee:latest
 
 # Terraform EE  
 cd terraform_ee && ansible-builder build --tag terraform-ee:latest
+
+# VMware EE
+cd vmware_ee && ansible-builder build --tag vmware-ee:latest
+
+# Windows EE
+cd windows_ee && ansible-builder build --tag windows-ee:latest
 ```
