@@ -1,2 +1,2 @@
 gcc [platform:rpm]
-python3-devel [platform:rpm]
+python3.11-devel [platform:rpm]
