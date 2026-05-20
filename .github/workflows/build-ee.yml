@@ -87,8 +87,6 @@ jobs:
           ansible-builder build \
             --tag quay.io/${{ secrets.QUAY_USERNAME }}/${{ matrix.ee_dir }}:latest \
             --tag quay.io/${{ secrets.QUAY_USERNAME }}/${{ matrix.ee_dir }}:${{ env.DATE_TAG}} \
-            --build-arg ANSIBLE_GALAXY_SERVER_CERTIFIED_TOKEN="${{ secrets.ANSIBLE_GALAXY_SERVER_CERTIFIED_TOKEN }}" \
-            --build-arg ANSIBLE_GALAXY_SERVER_VALIDATED_TOKEN="${{ secrets.ANSIBLE_GALAXY_SERVER_VALIDATED_TOKEN }}" \
             --context . \
             --container-runtime podman
         working-directory: ./${{ matrix.ee_dir }}
