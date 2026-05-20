@@ -28,8 +28,6 @@ jobs:
       # The filter's name is now the same as the directory path.
           filters: |
             # Add a new block here for every new EE.
-            proxmox_ee:
-              - 'proxmox_ee/**'
             servicenow_ee:
               - 'servicenow_ee/**'
             terraform_ee:
