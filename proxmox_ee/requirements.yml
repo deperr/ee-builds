@@ -1,0 +1,14 @@
+---
+
+collections:
+
+  - name: ansible.posix
+
+  - name: community.proxmox
+  - name: community.general
+  - name: community.crypto
+
+  - name: hashicorp.vault
+
+  - name: redhat.insights
+  - name: redhat.rhel_system_roles
